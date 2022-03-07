@@ -8,10 +8,13 @@ const app: Express = express()
 const PORT: string | number = process.env.PORT || 4000
 
 app.use(cors())
+//below added from https://stackoverflow.com/a/66564502/13681680
+app.use(express.urlencoded());  // To parse URL-encoded bodies
+app.use(express.json()); //To parse JSON body
 app.use(todoRoutes)
 
-const uri: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.fkwx6.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
-const options = { useNewUrlParser: true, useUnifiedTopology: true }
+const uri: string = `mongodb+srv://cluster0.fkwx6.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+const options = { user: process.env.MONGO_USR, pass: process.env.MONGO_PASSWD, useNewUrlParser: true, useUnifiedTopology: true }
 mongoose.set("useFindAndModify", false)
 
 mongoose
