@@ -1,10 +1,10 @@
 import { Response, Request } from "express"
-import { ITodo } from "./../../types/todo"
-import Todo from "../../models/todo"
+import { ITicket } from "./../../types/ticket"
+import Ticket from "../../models/ticket"
 
-const getTodos = async (req: Request, res: Response): Promise<void> => {
+const getTickets = async (req: Request, res: Response): Promise<void> => {
     try {
-        const todos: ITodo[] = await Todo.find()
+        const todos: ITicket[] = await Ticket.find()
         res.status(200).json({ todos })
     }
     catch (error) {
@@ -12,29 +12,38 @@ const getTodos = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-const addTodo = async (req: Request, res: Response): Promise<void> => {
+const addTickets = async (req: Request, res: Response): Promise<void> => {
+    console.log("REQUEST BODY\n"+req.body)
+    var data = JSON.stringify(req.body)
+    console.log("\nREQUEST BODY JSONIFIED\n"+data)
     try {
-        const body = req.body as Pick<ITodo, "name" | "description" | "status">
-
-        const todo: ITodo = new Todo({
-            name: body.name,
-            description: body.description,
-            status: body.status,
+        //console.log(req.body)
+        //const body = req.body as Pick<ITicket, "id" | "time_slot" | "checked_in">
+        const ticket: ITicket = new Ticket({
+            site_name: req.body.site_name,
+            visitor_name: req.body.visitor_name,
+            visitor_email: req.body.visitor_email,
+            visitor_id: req.body.visitor_id,
+            visitor_id_number: req.body.visitor_id_number,
+            num_adults: req.body.num_adults,
+            num_children: req.body.num_children,
+            time_slot: req.body.time_slot,
+            checked_in: req.body.checked_in,
         })
 
-        const newTodo: ITodo = await todo.save()
-        const allTodos: ITodo[] = await Todo.find()
+        const newTicket: ITicket = await ticket.save()
+        const allTicket: ITicket[] = await Ticket.find()
 
         res
             .status(201)
-            .json({message: "ToDo added", todo: newTodo, todos: allTodos})
+            .json({message: "Ticket added", ticket: newTicket, tickets: allTicket})
     }
     catch (error) {
         throw error
     }
 }
 
-const updateTodo =  async (req: Request, res: Response): Promise<void> => {
+/*const updateTodo =  async (req: Request, res: Response): Promise<void> => {
     try {
         const {
             params: { id },
@@ -70,6 +79,6 @@ const deleteTodo = async(req: Request, res: Response): Promise<void> => {
     } catch (error) {
         throw error
     }
-}
+}*/
 
-export { getTodos, addTodo, updateTodo, deleteTodo }
+export { getTickets, addTickets }

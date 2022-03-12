@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import cors from "cors"
 import todoRoutes from "./routes"
 import 'dotenv/config'
+const bodyParser = require("body-parser")
 
 const app: Express = express()
 
@@ -12,6 +13,7 @@ app.use(cors())
 //below added from https://stackoverflow.com/a/66564502/13681680
 app.use(express.urlencoded());  // To parse URL-encoded bodies
 app.use(express.json()); //To parse JSON body
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(todoRoutes)
 
 const uri: string = `mongodb+srv://cluster0.fkwx6.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
