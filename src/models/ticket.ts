@@ -40,6 +40,10 @@ const ticketSchema: Schema = new Schema(
             type: Boolean,
             required: true,
         },
+        hash: {
+            type: String,
+            required: true,
+        },
     },
     {timestamps: true}
 )

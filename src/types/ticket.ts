@@ -9,5 +9,6 @@ export interface ITicket extends Document {
     num_adults: number,
     num_children: number,
     time_slot: string,
-    checked_in: boolean
+    checked_in: boolean,
+    hash: string
 }

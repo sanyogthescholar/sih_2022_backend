@@ -29,6 +29,7 @@ const addTickets = async (req: Request, res: Response): Promise<void> => {
             num_children: req.body.num_children,
             time_slot: req.body.time_slot,
             checked_in: req.body.checked_in,
+            hash: req.body.hash,
         })
 
         const newTicket: ITicket = await ticket.save()
