@@ -25,9 +25,4 @@ const monumentSchema: Schema = new Schema(
     },
     {timestamps: true}
 )
-/*name: string
-    time_slot: string
-    quantity: number
-    price: number
-}*/
 export default model<IMonument>("Monument", monumentSchema)

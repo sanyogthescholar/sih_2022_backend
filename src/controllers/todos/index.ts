@@ -23,8 +23,6 @@ const addTickets = async (req: Request, res: Response): Promise<void> => {
     var data = JSON.stringify(req.body)
     console.log("\nREQUEST BODY JSONIFIED\n"+data)
     try {
-        //console.log(req.body)
-        //const body = req.body as Pick<ITicket, "id" | "time_slot" | "checked_in">
         const ticket: ITicket = new Ticket({
             site_name: req.body.site_name,
             visitor_name: req.body.visitor_name,
@@ -44,25 +42,6 @@ const addTickets = async (req: Request, res: Response): Promise<void> => {
         const bufferImage = await qrcode.toDataURL(qrString,qrOption);
         console.log(bufferImage);
 
-        // Decoding base-64 image
-        // Source: http://stackoverflow.com/questions/20267939/nodejs-write-base64-image-file
-        /*function decodeBase64Image(dataString: string) 
-        {
-          var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-          var response = {};
-
-          if (matches.length !== 3) 
-          {
-            return new Error('Invalid input string');
-          }
-
-          response.type = matches[1];
-          response.data = new Buffer(matches[2], 'base64');
-
-          return response;
-        }
-        var imageBuffer = decodeBase64Image(bufferImage);*/
-
         res
             .status(200)
             .json({ticket: bufferImage})
@@ -71,43 +50,5 @@ const addTickets = async (req: Request, res: Response): Promise<void> => {
         throw error
     }
 }
-
-/*const updateTodo =  async (req: Request, res: Response): Promise<void> => {
-    try {
-        const {
-            params: { id },
-            body,
-        } = req
-        const updateTodo: ITodo | null = await Todo.findByIdAndUpdate(
-            { _id: id },
-            body
-        )
-        const allTodos: ITodo[] = await Todo.find()
-        res.status(200).json({
-            message: "ToDo updated",
-            todo: updateTodo,
-            todos: allTodos,
-        })
-    }
-    catch (error) {
-        throw error
-    }
-}
-
-const deleteTodo = async(req: Request, res: Response): Promise<void> => {
-    try {
-        const deletedTodo: ITodo | null = await Todo.findByIdAndRemove(
-            req.params.id
-        )
-        const allTodos: ITodo[] = await Todo.find()
-        res.status(200).json({
-            message: "ToDo deleted",
-            todo: deletedTodo,
-            todos: allTodos,
-        })
-    } catch (error) {
-        throw error
-    }
-}*/
 
 export { getTickets, addTickets }
