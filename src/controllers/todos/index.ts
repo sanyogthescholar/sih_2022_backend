@@ -38,10 +38,9 @@ const addTickets = async (req: Request, res: Response): Promise<void> => {
 
         const newTicket: ITicket = await ticket.save()
         const allTicket: ITicket[] = await Ticket.find()
-        const qrString = req.body.hash;
+        const qrString = "localhost:4000/check/" + req.body.hash;
         const bufferImage = await qrcode.toDataURL(qrString,qrOption);
         console.log(bufferImage);
-
         res
             .status(200)
             .json({ticket: bufferImage})
@@ -51,4 +50,25 @@ const addTickets = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-export { getTickets, addTickets }
+const checkTickets = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const tick = await Ticket.findOne({"hash":req.params.hash})
+        var newvalues = { $set: {checked_in: true }, };
+        if(tick.checked_in == false){
+        await Ticket.updateOne({"hash":req.params.hash}, newvalues, { upsert: false })
+        res.send(`Site:${tick.site_name}<br/> Adults:${tick.num_adults}<br/> Children:${tick.num_children}<br/>\
+        Time Slot:${tick.time_slot}<br/> Visitor Name:${tick.visitor_name}<br/> Visitor ID:${tick.visitor_id}<br/>\
+        Visitor ID Number:${tick.visitor_id_number}<br/>
+        Visitor is now checked in<br/>`)
+        }
+        else{
+            await Ticket.updateOne({"hash":req.params.hash}, newvalues, { upsert: false })
+            res.send(`This ticket has already been checked in<br/>`)
+        }
+    }
+    catch (error) {
+        throw error
+    }
+}
+
+export { getTickets, addTickets, checkTickets }
